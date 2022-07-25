@@ -1,0 +1,17 @@
+node_modules/
+.DS_Store
+.idea/
+*.local
+.eslintcache
+
+# for production
+build/
+
+# for dev
+public/dll
+public/.cache
+
+# Log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*

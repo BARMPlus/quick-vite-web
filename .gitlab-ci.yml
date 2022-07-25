@@ -1,0 +1,21 @@
+default:
+  image: registry.cn-hangzhou.aliyuncs.com/chenglin-images/node:16.13
+  cache:
+    key: "$CI_COMMIT_REF_SLUG"
+    paths:
+      - node_modules/
+
+.only:
+  only:
+    - master
+    - merge_requests
+
+stages:
+  - lint
+
+lint:
+  extends: .only
+  stage: lint
+  script:
+    - yarn install
+    - yarn lint
