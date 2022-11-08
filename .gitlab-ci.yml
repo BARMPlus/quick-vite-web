@@ -7,7 +7,7 @@ default:
 
 .only:
   only:
-    - master
+    - main
     - merge_requests
 
 stages:

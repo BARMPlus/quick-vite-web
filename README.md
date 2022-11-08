@@ -1,5 +1,3 @@
-# quick-vite-web
-
 ## 开发相关命令
 
 ```bash
@@ -10,11 +8,7 @@ $ yarn lint:js
 $ yarn lint:css
 $ yarn lint # lint all
 
-$ yarn build #构建所有应用
-$ yarn build --scope=vite-app # 构建单个应用
-
-# 使用yarn workspace
-$ yarn worksapce [app-name](应用名称 eg:main) add [package-name] -D # 安装依赖
+$ yarn build #构建应用
 ```
 
 ## 代码规范
@@ -27,10 +21,14 @@ import { useState } from 'react'
 import { styled } from '@mui/material/styles'
 import { Box } from '@mui/material'
 
+import { LoginApi } from '@/api'
+
 import Sidebar from './siderbar'
 import Navbar from './navbar'
 
 import type { FC, ReactNode } from 'react'
+
+import './index.less'
 ```
 
 ## 注意事项
@@ -50,6 +48,5 @@ import type { FC, ReactNode } from 'react'
 - ✅ React v18
 - ✅ 组件库 MUI
 - ✅ ts + esm
-- ✅ yarn workspaces + vite.js + eslint + prettier + lint-staged + nx
+- ✅ yarn + vite.js + eslint + prettier + lint-staged
 - ✅ tailwind css
-- 🚧 redux + rematch + react-query + react-hook-form
