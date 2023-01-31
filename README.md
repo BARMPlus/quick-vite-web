@@ -1,14 +1,20 @@
-## 开发相关命令
+## 开发环境启动
 
 ```bash
-$ yarn install
-$ yarn start
+yarn install #安装依赖
+yarn start  #启动项目
+```
 
-$ yarn lint:js
-$ yarn lint:css
-$ yarn lint # lint all
+## 代码规范检测
+```bash
+yarn lint:js
+yarn lint:css
+yarn lint
+```
 
-$ yarn build #构建应用
+## 生成环境构建
+```bash
+yarn build #构建应用
 ```
 
 ## 代码规范
@@ -16,7 +22,7 @@ $ yarn build #构建应用
 引入文件
 
 ```typescript
-// import时，需要按照 绝对路径、类型、相对路径排列
+// import时，需要按照第三方包、绝对路径、相对路径、类型定义、样式顺序进行引入
 import { useState } from 'react'
 import { styled } from '@mui/material/styles'
 import { Box } from '@mui/material'
@@ -47,6 +53,7 @@ import './index.less'
 
 - ✅ React v18
 - ✅ 组件库 MUI
+- ✅ axios + react-query
 - ✅ ts + esm
 - ✅ yarn + vite.js + eslint + prettier + lint-staged
 - ✅ tailwind css

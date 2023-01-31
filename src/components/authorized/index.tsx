@@ -1,8 +1,8 @@
-import { Redirect } from 'react-router-dom'
+import { Navigate } from 'react-router-dom'
 
 const Authorized = ({ getUnauthorized, getForbidden, children }) => {
-  if (getUnauthorized()) return <Redirect to="/login" />
-  if (getForbidden && getForbidden()) return <Redirect to="/403" />
+  if (getUnauthorized()) return <Navigate to="/login" />
+  if (getForbidden && getForbidden()) return <Navigate to="/403" />
   return children
 }
 

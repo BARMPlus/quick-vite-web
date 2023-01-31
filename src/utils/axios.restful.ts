@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { stringify } from 'query-string'
 
-import store from '@/store'
+import { message } from '@/components'
 import envData from '@/constants/env'
 import { getCacheToken } from '@/utils/cache'
 
@@ -16,11 +16,7 @@ const errorMessageMap = {
 }
 
 function dispatchErrorMessage(desc: string) {
-  ;(store.dispatch.global as any).notify({
-    message: '请求错误',
-    type: 'error',
-    description: desc,
-  })
+  message.error(`请求错误: ${desc}`)
 }
 
 function beforeRequestInterceptor(request: Record<string, any>) {
@@ -41,14 +37,17 @@ function errorRequestInterceptor(error: Record<string, any>) {
 
 function successResponseInterceptor(response: Record<string, any>) {
   const {
-    data: { data, success, message = null, code = null },
+    data: { data, success, message = null, msg = null, code = null },
     config: { responseType },
   } = response
 
   if (['blob'].includes(responseType)) {
     return response
   } else if (!success) {
-    throw { message, code }
+    throw {
+      message: message || msg,
+      code,
+    }
   }
 
   return data
@@ -63,22 +62,19 @@ function errorResponseInterceptor(err: Record<string, any>) {
     response: err.response,
   }
 
-  // catchRequestError(error)
-
   if (error.code === 'ECONNABORTED') {
     dispatchErrorMessage('请求超时')
   }
   if (error.response) {
-    if (error.status === 403) {
-      // return history.push('/redirect/unauthorized')
-    }
     if (error.status === 401) {
-      // generateAuthUrl({ jump: true })
+      // 401处理
+    }
+    if (error.status === 403) {
+      // 403处理
     }
     dispatchErrorMessage(errorMessageMap[error.status])
 
-    if (Object.keys(errorMessageMap).includes(String(error.status)))
-      return { errorResponse: error }
+    if (Object.keys(errorMessageMap).includes(String(error.status))) return { errorResponse: error }
   } else {
     dispatchErrorMessage(error.message)
   }
@@ -105,28 +101,16 @@ function ApiInstanceFactory(baseURL: string) {
   })
 
   // add request interceptors
-  instance.interceptors.request.use(
-    beforeRequestInterceptor,
-    errorRequestInterceptor,
-  )
+  instance.interceptors.request.use(beforeRequestInterceptor, errorRequestInterceptor)
 
   // add response interceptors
-  instance.interceptors.response.use(
-    successResponseInterceptor,
-    errorResponseInterceptor,
-  )
+  instance.interceptors.response.use(successResponseInterceptor, errorResponseInterceptor)
 
   // add request interceptors
-  instanceR.interceptors.request.use(
-    beforeRequestInterceptorR,
-    errorRequestInterceptor,
-  )
+  instanceR.interceptors.request.use(beforeRequestInterceptorR, errorRequestInterceptor)
 
   // add response interceptors
-  instanceR.interceptors.response.use(
-    successResponseInterceptor,
-    errorResponseInterceptor,
-  )
+  instanceR.interceptors.response.use(successResponseInterceptor, errorResponseInterceptor)
 
   return [instance, instanceR]
 }

@@ -15,3 +15,11 @@ interface IBaseOptions {
   value: any
   [prop: string]: any
 }
+
+interface ResponseError {
+  responseError: boolean
+  message: string
+  code: string | number
+  status: number
+  response: any
+}
