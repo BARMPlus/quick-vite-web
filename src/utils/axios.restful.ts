@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { stringify } from 'query-string'
+import { message } from 'antd'
 
-import { message } from '@/components'
 import envData from '@/constants/env'
 import { getCacheToken } from '@/utils/cache'
 

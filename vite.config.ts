@@ -2,8 +2,11 @@ import { defineConfig } from 'vite'
 import tsconfigPaths from 'vite-tsconfig-paths'
 import react from '@vitejs/plugin-react'
 import { join } from 'path'
+import dns from 'dns'
 
 const cwd = process.cwd()
+
+dns.setDefaultResultOrder('verbatim')
 
 export default defineConfig({
   base: process.env.PUBLIC_PATH || '/',

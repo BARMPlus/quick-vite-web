@@ -1,6 +1,5 @@
+import { message } from 'antd'
 import { QueryClient } from '@tanstack/react-query'
-
-import { message } from '@/components'
 
 const onError = (error: unknown) => {
   message.error((error as ResponseError).message || '请求错误')

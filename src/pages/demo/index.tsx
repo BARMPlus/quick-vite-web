@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
+import { Button } from 'antd'
 
 const Demo = () => {
   const navigate = useNavigate()
@@ -11,13 +12,13 @@ const Demo = () => {
 
   return (
     <div className="text-neutral-sub-title">
-      <button
+      <Button
         onClick={() => {
           navigate('/login')
         }}
       >
         Demo Page Click
-      </button>
+      </Button>
     </div>
   )
 }

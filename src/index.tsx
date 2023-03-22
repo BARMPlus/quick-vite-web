@@ -1,34 +1,28 @@
 import { createRoot } from 'react-dom/client'
-import { CssBaseline } from '@mui/material'
-import { StyledEngineProvider, ThemeProvider } from '@mui/material/styles'
+import { ConfigProvider, message } from 'antd'
 import { Provider } from 'react-redux'
 import { QueryClientProvider } from '@tanstack/react-query'
+import zhCN from 'antd/locale/zh_CN'
 
 import store from '@/store'
 import Router from '@/router'
-import { createTheme } from '@/theme'
 import { queryClient } from '@/utils/query-client'
 
 import '@/styles/index.less'
 
-const theme = createTheme({
-  direction: 'ltr',
-  responsiveFontSizes: true,
-  mode: 'light',
+message.config({
+  top: 70,
 })
 
 const App = () => {
   return (
-    <StyledEngineProvider injectFirst>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <QueryClientProvider client={queryClient}>
-          <Provider store={store}>
-            <Router />
-          </Provider>
-        </QueryClientProvider>
-      </ThemeProvider>
-    </StyledEngineProvider>
+    <ConfigProvider locale={zhCN}>
+      <QueryClientProvider client={queryClient}>
+        <Provider store={store}>
+          <Router />
+        </Provider>
+      </QueryClientProvider>
+    </ConfigProvider>
   )
 }
 
