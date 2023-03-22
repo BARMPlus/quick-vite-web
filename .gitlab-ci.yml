@@ -1,5 +1,5 @@
 default:
-  image: registry.cn-hangzhou.aliyuncs.com/chenglin-images/node:16.13
+  image: registry.cn-hangzhou.aliyuncs.com/chenglin-images/node:16.15
   cache:
     key: "$CI_COMMIT_REF_SLUG"
     paths:

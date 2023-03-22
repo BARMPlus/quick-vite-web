@@ -44,7 +44,8 @@ import type { IProps } from './types'
 
 
 ### 相关技术栈
--  React + Antd + Rematch
+-  Vite
+-  React + Antd + Rematch + Tailwindcss
 -  axios + @tanstack/react-query
 -  EsLint + StyleLint + Prettier
 -  Husky + Lint-Staged + CommitLint
