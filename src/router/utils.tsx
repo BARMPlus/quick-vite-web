@@ -4,40 +4,7 @@ import { Route, Routes } from 'react-router-dom'
 import { AsyncComponent, Authorized } from '@/components'
 import { getCacheToken } from '@/utils/cache'
 
-import type { IRouteItem, IRouteComponentItem } from './routes/type.d'
-
-export function supplyRoutes(routes, inheritAuthority?): IRouteItem[] {
-  return routes.map((route) => {
-    const config = {
-      ...route,
-      path: route.path || '',
-      authority: route.authority || inheritAuthority,
-    }
-
-    if (route.children) {
-      config.children = supplyRoutes(route.children, route.authority || inheritAuthority)
-    }
-
-    return config
-  })
-}
-
-export function flattenRoutes(routes, { needDealSwitch = true } = {}) {
-  const flattenedRoutes: IRouteItem[] = []
-
-  ;(function recursion(_routes) {
-    _routes.forEach((route) => {
-      flattenedRoutes.push(route)
-      const handleSwitch = needDealSwitch ? !route.isSwitch : true
-      if (handleSwitch && route.children) {
-        recursion(route.children)
-        delete route.children
-      }
-    })
-  })(routes)
-
-  return flattenedRoutes
-}
+import type { IRouteComponentItem } from './routes/type.d'
 
 export function generateRouteConfig(routes): IRouteComponentItem[] {
   const handleComponent = (config): IRouteComponentItem[] => {
@@ -51,7 +18,7 @@ export function generateRouteConfig(routes): IRouteComponentItem[] {
     })
   }
 
-  return handleComponent(flattenRoutes(supplyRoutes(routes)))
+  return handleComponent(routes)
 }
 
 export function mapRoutes(routes, isAuthorized = false) {
@@ -64,23 +31,35 @@ export function mapRoutes(routes, isAuthorized = false) {
     return () => false
   }
 
-  return routes.map(({ path, isSwitch, children, Component }) => {
-    const UnauthorizedRouteContent = () => (
-      <AsyncComponent loadingDelay={500}>{Component && <Component />}</AsyncComponent>
+  return routes.map(({ path, children, Component }) => {
+    const UnauthorizedRouteContent = (props) => (
+      <AsyncComponent loadingDelay={500}>
+        {Component ? <Component>{props.children}</Component> : props.children}
+      </AsyncComponent>
     )
 
-    const AuthorizedRouteContent = () => (
+    const AuthorizedRouteContent = (props) => (
       <Authorized getUnauthorized={getIsUnauthorized} getForbidden={getIsForbidden()}>
-        {UnauthorizedRouteContent()}
+        <UnauthorizedRouteContent {...props} />
       </Authorized>
     )
 
-    const element = isAuthorized ? AuthorizedRouteContent() : UnauthorizedRouteContent()
+    const Element = isAuthorized ? AuthorizedRouteContent : UnauthorizedRouteContent
 
-    if (isSwitch && children) {
-      return <Route key={path} path={`${path}/*`} element={<Routes>{mapRoutes(children, isAuthorized)}</Routes>} />
+    if (children) {
+      return (
+        <Route
+          key={path}
+          path={`${path}/*`}
+          element={
+            <Element>
+              <Routes>{mapRoutes(children, isAuthorized)}</Routes>
+            </Element>
+          }
+        />
+      )
     }
 
-    return <Route key={path} path={path} element={element} />
+    return <Route key={path} path={path} element={<Element />} />
   })
 }
