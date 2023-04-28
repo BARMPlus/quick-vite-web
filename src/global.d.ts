@@ -22,4 +22,5 @@ interface ResponseError {
   code: string | number
   status: number
   response: any
+  processed: boolean
 }

@@ -60,6 +60,7 @@ function errorResponseInterceptor(err: Record<string, any>) {
     status: err.response?.status,
     statusText: err.response?.statusText,
     response: err.response,
+    processed: false,
   }
 
   if (error.code === 'ECONNABORTED') {
@@ -74,7 +75,7 @@ function errorResponseInterceptor(err: Record<string, any>) {
     }
     dispatchErrorMessage(errorMessageMap[error.status])
 
-    if (Object.keys(errorMessageMap).includes(String(error.status))) return { errorResponse: error }
+    if (Object.keys(errorMessageMap).includes(String(error.status))) error.processed = true
   } else {
     dispatchErrorMessage(error.message)
   }

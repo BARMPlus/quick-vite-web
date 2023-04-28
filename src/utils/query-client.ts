@@ -1,8 +1,8 @@
 import { message } from 'antd'
 import { QueryClient } from '@tanstack/react-query'
 
-const onError = (error: unknown) => {
-  message.error((error as ResponseError).message || '请求错误')
+const onError = (error: any) => {
+  if (!error.processed) message.error(error.message || '请求错误')
 }
 
 const queryClient = new QueryClient({
